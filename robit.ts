@@ -422,7 +422,7 @@ namespace robit {
         pins.digitalWritePin(pin, 0);
 
         // read pulse
-        let d = pins.pulseIn(pin, PulseValue.High, 11600);
+        let d = pins.pulseIn(pin, PulseValue.High, 23000);  // 8 / 340 = 
         return d / 58;
     }
 
