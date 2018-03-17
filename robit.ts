@@ -42,7 +42,6 @@ namespace robit {
     }
 
     export enum Motors {
-
         //% block="Left front"
         M1 = 0x1,
         //% block="Left rear"
@@ -59,9 +58,14 @@ namespace robit {
     }
 
     export enum Jpin {
-        J1 = 1,
-        J2 = 2,
+        //% block="J3"
         J3 = 3,
+        //% block="J1"
+        J1 = 1,
+        //% block="J2"
+        J2 = 2,
+        
+        //% block="J4"
         J4 = 4
     }
 
@@ -388,6 +392,10 @@ namespace robit {
 
 
     //超声波
+    /**
+	 * get Ultrasonic
+	 * @param jpin describe parameter here, eg: J3
+	*/
     //% blockId=robit_ultrasonic block="Ultrasonic|pin %pin"
     //% weight=10
     export function Ultrasonic(jpin: Jpin): number {
@@ -420,4 +428,4 @@ namespace robit {
 
 
 }
- 
+
