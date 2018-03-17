@@ -87,7 +87,7 @@ namespace robit {
 
     let matBuf = pins.createBuffer(17);
 
-    //iicĞ´
+    //iicå†™
     function i2cwrite(addr: number, reg: number, value: number) {
         let buf = pins.createBuffer(2)
         buf[0] = reg
@@ -96,7 +96,7 @@ namespace robit {
     }
 
 
-    //iicÉèÖÃ
+    //iicè®¾ç½®
     function i2ccmd(addr: number, value: number) {
         let buf = pins.createBuffer(1)
         buf[0] = value
@@ -104,7 +104,7 @@ namespace robit {
     }
 
 
-    //iic¶Á
+    //iicè¯»
     function i2cread(addr: number, reg: number) {
         pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE);
         let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE);
@@ -112,7 +112,7 @@ namespace robit {
     }
 
 
-    //³õÊ¼»¯9685
+    //åˆå§‹åŒ–9685
     function initPCA9685(): void {
         i2cwrite(PCA9685_ADDRESS, MODE1, 0x00)
         setFreq(50);
@@ -123,7 +123,7 @@ namespace robit {
     }
 
 
-    //ÉèÖÃÆµÂÊ
+    //è®¾ç½®é¢‘ç‡
     function setFreq(freq: number): void {
         // Constrain the frequency
         let prescaleval = 25000000;
@@ -141,7 +141,7 @@ namespace robit {
     }
 
 
-    //ÉèÖÃPWM
+    //è®¾ç½®PWM
     function setPwm(channel: number, on: number, off: number): void {
         if (channel < 0 || channel > 15)
             return;
@@ -157,7 +157,7 @@ namespace robit {
 
 
 
-    //ÉèÖÃ²½½øµç»ú
+    //è®¾ç½®æ­¥è¿›ç”µæœº
     function setStepper(index: number, dir: boolean): void {
         if (index == 1) {
             if (dir) {
@@ -188,17 +188,17 @@ namespace robit {
     }
 
 
-    //µç»úÍ£Ö¹
+    //ç”µæœºåœæ­¢
     function stopMotor(index: number) {
         setPwm((index - 1) * 2, 0, 0);
         setPwm((index - 1) * 2 + 1, 0, 0);
     }
 
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-    //µç»ú
+    //èˆµæœº
     /**
 	 * Servo Execute
 	 * @param index Servo Channel; eg: S1
@@ -206,6 +206,7 @@ namespace robit {
 	*/
     //% blockId=robit_servo block="Servo|%index|degree %degree"
     //% weight=100
+    //% advanced=true
     //% blockGap=50
     //% degree.min=0 degree.max=180
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
@@ -220,9 +221,10 @@ namespace robit {
     }
 
 
-    //²½½øµç»úĞı×ª¶ÈÊı
+    //æ­¥è¿›ç”µæœºæ—‹è½¬åº¦æ•°
     //% blockId=robit_stepper_degree block="Stepper 28BYJ-48|%index|degree %degree"
     //% weight=90
+    //% advanced=true
     export function StepperDegree(index: Steppers, degree: number): void {
         if (!initialized) {
             initPCA9685()
@@ -235,18 +237,20 @@ namespace robit {
 
 
 
-    //²½½øµç»úÈ¦Êı
+    //æ­¥è¿›ç”µæœºåœˆæ•°
     //% blockId=robit_stepper_turn block="Stepper 28BYJ-48|%index|turn %turn"
     //% weight=90
+    //% advanced=true
     export function StepperTurn(index: Steppers, turn: Turns): void {
         let degree = turn;
         StepperDegree(index, degree);
     }
 
 
-    //Á½Â·²½½øµç»ú
+    //ä¸¤è·¯æ­¥è¿›ç”µæœº
     //% blockId=robit_stepper_dual block="Dual Stepper(Degree) |M1 %degree1| M2 %degree2"
     //% weight=89
+    //% advanced=true
     export function StepperDual(degree1: number, degree2: number): void {
         if (!initialized) {
             initPCA9685()
@@ -268,7 +272,7 @@ namespace robit {
     }
 
 
-    //Ë«²½½øÇ°½ø¾àÀë
+    //åŒæ­¥è¿›å‰è¿›è·ç¦»
     /**
 	 * Stepper Car move forward
 	 * @param distance Distance to move in cm; eg: 10, 20
@@ -276,6 +280,7 @@ namespace robit {
 	*/
     //% blockId=robit_stpcar_move block="Car Forward|Diameter(cm) %distance|Wheel Diameter(mm) %diameter"
     //% weight=88
+    //% advanced=true
     export function StpCarMove(distance: number, diameter: number): void {
         if (!initialized) {
             initPCA9685()
@@ -289,7 +294,7 @@ namespace robit {
     }
 
 
-    //Ë«²½½ø×ªÏò½Ç¶È
+    //åŒæ­¥è¿›è½¬å‘è§’åº¦
     /**
 	 * Stepper Car turn by degree
 	 * @param turn Degree to turn; eg: 90, 180, 360
@@ -299,6 +304,7 @@ namespace robit {
     //% blockId=robit_stpcar_turn block="Car Turn|Degree %turn|Wheel Diameter(mm) %diameter|Track(mm) %track"
     //% weight=87
     //% blockGap=50
+    //% advanced=true
     export function StpCarTurn(turn: number, diameter: number, track: number): void {
         if (!initialized) {
             initPCA9685()
@@ -312,7 +318,7 @@ namespace robit {
     }
 
 
-    //µ¥¸öµç»úËÙ¶È
+    //å•ä¸ªç”µæœºé€Ÿåº¦
     //% blockId=robit_motor_run block="%index |Wheel|speed %speed "
     //% weight=85
     //% speed.min=-100 speed.max=100
@@ -343,7 +349,7 @@ namespace robit {
 
 
 
-    //Á½Â·µç»úËÙ¶È
+    //ä¸¤è·¯ç”µæœºé€Ÿåº¦
     /**
 	 * Execute two motors at the same time
 	 * @param motor1 First Motor; eg: M2
@@ -362,7 +368,7 @@ namespace robit {
     }
 
 
-    //µç»úÍ£Ö¹
+    //ç”µæœºåœæ­¢
     //% blockId=robit_stop block="Motor Stop|%index|"
     //% weight=80
     export function MotorStop(index: Motors): void {
@@ -370,7 +376,7 @@ namespace robit {
     }
 
 
-    //ËùÓĞµç»úÍ£Ö¹
+    //æ‰€æœ‰ç”µæœºåœæ­¢
     //% blockId=robit_stop_all block="Motor Stop All"
     //% weight=79
     //% blockGap=50
@@ -381,7 +387,7 @@ namespace robit {
     }
 
 
-    //³¬Éù²¨
+    //è¶…å£°æ³¢
     //% blockId=robit_ultrasonic block="Ultrasonic|pin %pin"
     //% weight=10
     export function Ultrasonic(jpin: Jpin): number {
@@ -414,3 +420,4 @@ namespace robit {
 
 
 }
+ 
