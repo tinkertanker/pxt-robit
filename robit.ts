@@ -2,6 +2,10 @@
 
 //% color=#0fbc11 weight=10 icon="\uf013"
 namespace robit {
+
+    let line_follow_Left_Pin=DigitalPin.P3
+    let line_follow_Right_Pin = DigitalPin.P4
+
     const PCA9685_ADDRESS = 0x40
     const MODE1 = 0x00
     const MODE2 = 0x01
@@ -64,7 +68,6 @@ namespace robit {
         J1 = 1,
         //% block="J2"
         J2 = 2,
-        
         //% block="J4"
         J4 = 4
     }
@@ -391,6 +394,7 @@ namespace robit {
     }
 
 
+
     //超声波
     /**
 	 * get Ultrasonic
@@ -411,8 +415,6 @@ namespace robit {
                 break;
         }
 
-
-
         // send pulse
         pins.setPull(pin, PinPullMode.PullNone);
         pins.digitalWritePin(pin, 0);
@@ -425,6 +427,69 @@ namespace robit {
         let d = pins.pulseIn(pin, PulseValue.High, 23000);  // 8 / 340 = 
         return d / 58;
     }
+
+
+
+
+    //巡线初始化
+    /**
+	 * init line follow
+	 * @param jpin describe parameter here, eg: J2
+	*/
+    //% blockId=robit_init_line_follow block="init line follow|pin %jpin"
+    //% weight=10
+    export function init_line_follow(jpin: Jpin): void {
+        switch (jpin) {
+            case 1:
+                line_follow_Left_Pin = DigitalPin.P13
+                line_follow_Right_Pin = DigitalPin.P14
+                break;
+            case 2:
+                line_follow_Left_Pin = DigitalPin.P15
+                line_follow_Right_Pin = DigitalPin.P16
+                break;
+            case 3:
+                line_follow_Left_Pin = DigitalPin.P1
+                line_follow_Right_Pin = DigitalPin.P2
+                break;
+            case 4:
+                line_follow_Left_Pin = DigitalPin.P3
+                line_follow_Right_Pin = DigitalPin.P4
+                break;
+        }
+    }
+
+
+    /**
+	 * line follow left
+	*/
+    //% blockId=robit_left_line_follow block="left line follow"
+    //% weight=10
+    export function left_line_follow(): number {
+        let i = 0
+        if(line_follow_Left_Pin == 1){
+            i=1
+        }else i = 0
+        return i
+    }
+
+
+    /**
+	 * right follow right
+	*/
+    //% blockId=robit_right_line_follow block="right line follow"
+    //% weight=10
+    export function right_line_follow(): number {
+        let i = 0
+        if (line_follow_Left_Pin == 1) {
+            i = 1
+        } else i = 0
+        return i
+    }
+
+
+
+
 
 
 }
