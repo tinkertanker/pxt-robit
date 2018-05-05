@@ -425,7 +425,7 @@ namespace robit {
 
         // read pulse
         let d = pins.pulseIn(pin, PulseValue.High, 23000);  // 8 / 340 = 
-        return d / 58;
+        return d * 5 / 3 / 58;
     }
 
 
