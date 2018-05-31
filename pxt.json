@@ -4,7 +4,7 @@
     "description": "ELECFREAKS robit",
     "license": "MIT",
     "dependencies": {
-        "core": "*"
+        "core": "*",
 		"IR": "github:Tinkertanker/pxt-ir-receiver"
     },
     "files": [
