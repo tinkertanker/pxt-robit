@@ -1,4 +1,5 @@
 # robit Package
+This ElecFreaks robit package was developed by [ElecFreaks](https://www.elecfreaks.com/) with minor assistance from [Tinkercademy](https://tinkercademy.com/).
 
 
 ## Code Example
