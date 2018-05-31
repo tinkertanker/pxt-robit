@@ -3,24 +3,29 @@
 //% color=#0fbc11 weight=10 icon="\uf013"
 namespace robit {
 
-    let line_follow_Left_Pin=DigitalPin.P3
+    let line_follow_Left_Pin = DigitalPin.P3
     let line_follow_Right_Pin = DigitalPin.P4
 
     const PCA9685_ADDRESS = 0x40
+
     const MODE1 = 0x00
     const MODE2 = 0x01
+
     const SUBADR1 = 0x02
     const SUBADR2 = 0x03
     const SUBADR3 = 0x04
     const PRESCALE = 0xFE
+
     const LED0_ON_L = 0x06
     const LED0_ON_H = 0x07
     const LED0_OFF_L = 0x08
     const LED0_OFF_H = 0x09
+
     const ALL_LED_ON_L = 0xFA
     const ALL_LED_ON_H = 0xFB
     const ALL_LED_OFF_L = 0xFC
     const ALL_LED_OFF_H = 0xFD
+
 
     const STP_CHA_L = 2047
     const STP_CHA_H = 4095
@@ -90,7 +95,7 @@ namespace robit {
     }
 
     let initialized = false
-    let initializedMatrix = false
+    //    let initializedMatrix = false
 
     let matBuf = pins.createBuffer(17);
 
@@ -119,10 +124,10 @@ namespace robit {
     }
 
 
-    //初始化9685
+    //初始化9685，使用内部时钟25MHz
     function initPCA9685(): void {
         i2cwrite(PCA9685_ADDRESS, MODE1, 0x00)
-        setFreq(50);
+        setFreq(50); //1s / 20ms
         for (let idx = 0; idx < 16; idx++) {
             setPwm(idx, 0, 0);
         }
@@ -130,12 +135,13 @@ namespace robit {
     }
 
 
-    //设置频率
+    //设置PWM频率
     function setFreq(freq: number): void {
         // Constrain the frequency
         let prescaleval = 25000000;
         prescaleval /= 4096;
         prescaleval /= freq;
+        //prescaleval = prescaleval * 25 / 23;  // 0.915
         prescaleval -= 1;
         let prescale = prescaleval; //Math.Floor(prescaleval + 0.5);
         let oldmode = i2cread(PCA9685_ADDRESS, MODE1);
@@ -143,8 +149,9 @@ namespace robit {
         i2cwrite(PCA9685_ADDRESS, MODE1, newmode); // go to sleep
         i2cwrite(PCA9685_ADDRESS, PRESCALE, prescale); // set the prescaler
         i2cwrite(PCA9685_ADDRESS, MODE1, oldmode);
-        control.waitMicros(5000);
-        i2cwrite(PCA9685_ADDRESS, MODE1, oldmode | 0xa1);
+        basic.pause(1)
+        //control.waitMicros(5000);
+        i2cwrite(PCA9685_ADDRESS, MODE1, oldmode | 0xa1);  //1010 0001
     }
 
 
@@ -205,7 +212,7 @@ namespace robit {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    //舵机
+    //设置舵机PWM占空比（度数）
     /**
 	 * Servo Execute
 	 * @param index Servo Channel; eg: S1
@@ -465,12 +472,11 @@ namespace robit {
 	*/
     //% blockId=robit_left_line_follow block="left line follow"
     //% weight=10
-    export function left_line_follow(): number {
-        let i = 0
-        if(line_follow_Left_Pin == 1){
-            i=1
-        }else i = 0
-        return i
+    export function left_line_follow(): boolean {
+ 
+        if (line_follow_Left_Pin == 1) {
+            return true
+        } else return  false
     }
 
 
@@ -479,17 +485,11 @@ namespace robit {
 	*/
     //% blockId=robit_right_line_follow block="right line follow"
     //% weight=10
-    export function right_line_follow(): number {
-        let i = 0
+    export function right_line_follow(): boolean {
         if (line_follow_Left_Pin == 1) {
-            i = 1
-        } else i = 0
-        return i
+            return true
+        } else return false
     }
-
-
-
-
 
 
 }
