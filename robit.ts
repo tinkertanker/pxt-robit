@@ -118,9 +118,9 @@ namespace robit {
 
     //iic读
     function i2cread(addr: number, reg: number) {
-        pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE);
-        let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE);
-        return val;
+        pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE)
+        let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE)
+        return val
     }
 
 
@@ -138,20 +138,20 @@ namespace robit {
     //设置PWM频率
     function setFreq(freq: number): void {
         // Constrain the frequency
-        let prescaleval = 25000000;
-        prescaleval /= 4096;
-        prescaleval /= freq;
-        prescaleval = prescaleval * 25 / 23;  // 0.915
-        prescaleval -= 1;
-        let prescale = prescaleval; //Math.Floor(prescaleval + 0.5);
-        let oldmode = i2cread(PCA9685_ADDRESS, MODE1);
-        let newmode = (oldmode & 0x7F) | 0x10; // sleep
-        i2cwrite(PCA9685_ADDRESS, MODE1, newmode); // go to sleep
-        i2cwrite(PCA9685_ADDRESS, PRESCALE, prescale); // set the prescaler
-        i2cwrite(PCA9685_ADDRESS, MODE1, oldmode);
+        let prescaleval = 25000000
+        prescaleval /= 4096
+        prescaleval /= freq
+        prescaleval = prescaleval * 25 / 24  // 0.915
+        prescaleval -= 1
+        let prescale = prescaleval //Math.Floor(prescaleval + 0.5);
+        let oldmode = i2cread(PCA9685_ADDRESS, MODE1)
+        let newmode = (oldmode & 0x7F) | 0x10 // sleep
+        i2cwrite(PCA9685_ADDRESS, MODE1, newmode) // go to sleep
+        i2cwrite(PCA9685_ADDRESS, PRESCALE, prescale) // set the prescaler
+        i2cwrite(PCA9685_ADDRESS, MODE1, oldmode)
         basic.pause(1)
         //control.waitMicros(5000);
-        i2cwrite(PCA9685_ADDRESS, MODE1, oldmode | 0xa1);  //1010 0001
+        i2cwrite(PCA9685_ADDRESS, MODE1, oldmode | 0xa1)  //1010 0001
     }
 
 
@@ -160,13 +160,13 @@ namespace robit {
         if (channel < 0 || channel > 15)
             return;
 
-        let buf = pins.createBuffer(5);
-        buf[0] = LED0_ON_L + 4 * channel;
-        buf[1] = on & 0xff;
-        buf[2] = (on >> 8) & 0xff;
-        buf[3] = off & 0xff;
-        buf[4] = (off >> 8) & 0xff;
-        pins.i2cWriteBuffer(PCA9685_ADDRESS, buf);
+        let buf = pins.createBuffer(5)
+        buf[0] = LED0_ON_L + 4 * channel
+        buf[1] = on & 0xff
+        buf[2] = (on >> 8) & 0xff
+        buf[3] = off & 0xff
+        buf[4] = (off >> 8) & 0xff
+        pins.i2cWriteBuffer(PCA9685_ADDRESS, buf)
     }
 
 
@@ -175,28 +175,28 @@ namespace robit {
     function setStepper(index: number, dir: boolean): void {
         if (index == 1) {
             if (dir) {
-                setPwm(0, STP_CHA_L, STP_CHA_H);
-                setPwm(2, STP_CHB_L, STP_CHB_H);
-                setPwm(1, STP_CHC_L, STP_CHC_H);
-                setPwm(3, STP_CHD_L, STP_CHD_H);
+                setPwm(0, STP_CHA_L, STP_CHA_H)
+                setPwm(2, STP_CHB_L, STP_CHB_H)
+                setPwm(1, STP_CHC_L, STP_CHC_H)
+                setPwm(3, STP_CHD_L, STP_CHD_H)
             } else {
-                setPwm(3, STP_CHA_L, STP_CHA_H);
-                setPwm(1, STP_CHB_L, STP_CHB_H);
-                setPwm(2, STP_CHC_L, STP_CHC_H);
-                setPwm(0, STP_CHD_L, STP_CHD_H);
+                setPwm(3, STP_CHA_L, STP_CHA_H)
+                setPwm(1, STP_CHB_L, STP_CHB_H)
+                setPwm(2, STP_CHC_L, STP_CHC_H)
+                setPwm(0, STP_CHD_L, STP_CHD_H)
             }
         }
         else {
             if (dir) {
-                setPwm(4, STP_CHA_L, STP_CHA_H);
-                setPwm(6, STP_CHB_L, STP_CHB_H);
-                setPwm(5, STP_CHC_L, STP_CHC_H);
-                setPwm(7, STP_CHD_L, STP_CHD_H);
+                setPwm(4, STP_CHA_L, STP_CHA_H)
+                setPwm(6, STP_CHB_L, STP_CHB_H)
+                setPwm(5, STP_CHC_L, STP_CHC_H)
+                setPwm(7, STP_CHD_L, STP_CHD_H)
             } else {
-                setPwm(7, STP_CHA_L, STP_CHA_H);
-                setPwm(5, STP_CHB_L, STP_CHB_H);
-                setPwm(6, STP_CHC_L, STP_CHC_H);
-                setPwm(4, STP_CHD_L, STP_CHD_H);
+                setPwm(7, STP_CHA_L, STP_CHA_H)
+                setPwm(5, STP_CHB_L, STP_CHB_H)
+                setPwm(6, STP_CHC_L, STP_CHC_H)
+                setPwm(4, STP_CHD_L, STP_CHD_H)
             }
         }
     }
@@ -204,8 +204,8 @@ namespace robit {
 
     //电机停止
     function stopMotor(index: number) {
-        setPwm((index - 1) * 2, 0, 0);
-        setPwm((index - 1) * 2 + 1, 0, 0);
+        setPwm((index - 1) * 2, 0, 0)
+        setPwm((index - 1) * 2 + 1, 0, 0)
     }
 
 
@@ -243,9 +243,9 @@ namespace robit {
         if (!initialized) {
             initPCA9685()
         }
-        setStepper(index, degree > 0);
-        degree = Math.abs(degree);
-        basic.pause(10240 * degree / 360);
+        setStepper(index, degree > 0)
+        degree = Math.abs(degree)
+        basic.pause(10240 * degree / 360)
         MotorStopAll()
     }
 
@@ -256,8 +256,8 @@ namespace robit {
     //% weight=90
     //% advanced=true
     export function StepperTurn(index: Steppers, turn: Turns): void {
-        let degree = turn;
-        StepperDegree(index, degree);
+        let degree = turn
+        StepperDegree(index, degree)
     }
 
 
