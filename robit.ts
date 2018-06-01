@@ -472,11 +472,12 @@ namespace robit {
 	*/
     //% blockId=robit_left_line_follow block="left line follow"
     //% weight=10
-    export function left_line_follow(): boolean {
- 
-        if (line_follow_Left_Pin == 1) {
-            return true
-        } else return  false
+    export function left_line_follow(): number {
+        let i = 0
+	if (line_follow_Left_Pin == 1) {
+             i = 1
+        } else i = 0
+	return i
     }
 
 
