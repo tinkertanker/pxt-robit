@@ -474,7 +474,6 @@ namespace robit {
     //% weight=10
     export function left_line_follow(): number {
         let i = 0
-	pins.digitalReadPin(line_follow_Left_Pin)
 	if (pins.digitalReadPin(line_follow_Left_Pin) == 1) {
              i = 1
         } else i = 0
@@ -488,9 +487,11 @@ namespace robit {
     //% blockId=robit_right_line_follow block="right line follow"
     //% weight=10
     export function right_line_follow(): boolean {
-        if (line_follow_Left_Pin == 1) {
-            return true
-        } else return false
+        let i = 0
+	if (pins.digitalReadPin(line_follow_Right_Pin) == 1) {
+             i = 1
+        } else i = 0
+	return i
     }
 
 
