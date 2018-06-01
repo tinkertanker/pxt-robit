@@ -67,13 +67,13 @@ namespace robit {
     }
 
     export enum Jpin {
-        //% block="J3"
+        //% block="J33"
         J3 = 3,
-        //% block="J1"
+        //% block="J11"
         J1 = 1,
-        //% block="J2"
+        //% block="J22"
         J2 = 2,
-        //% block="J4"
+        //% block="J44"
         J4 = 4
     }
 
