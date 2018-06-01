@@ -474,7 +474,8 @@ namespace robit {
     //% weight=10
     export function left_line_follow(): number {
         let i = 0
-	if (line_follow_Left_Pin == 1) {
+	pins.digitalReadPin(line_follow_Left_Pin)
+	if (pins.digitalReadPin(line_follow_Left_Pin) == 1) {
              i = 1
         } else i = 0
 	return i
