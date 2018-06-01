@@ -141,7 +141,7 @@ namespace robit {
         let prescaleval = 25000000;
         prescaleval /= 4096;
         prescaleval /= freq;
-        //prescaleval = prescaleval * 25 / 23;  // 0.915
+        prescaleval = prescaleval * 25 / 23;  // 0.915
         prescaleval -= 1;
         let prescale = prescaleval; //Math.Floor(prescaleval + 0.5);
         let oldmode = i2cread(PCA9685_ADDRESS, MODE1);
