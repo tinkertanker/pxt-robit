@@ -4,20 +4,32 @@ This ElecFreaks robit package was developed by [ElecFreaks](https://www.elecfrea
 
 ## Code Example
 ```JavaScript
+robit.init_line_follow(robit.Jpin.J1)
 basic.forever(() => {
-    motorbit.forward(70)
-    basic.pause(2000)
-    motorbit.back(50)
-    basic.pause(2000)
-    motorbit.turnleft(50)
-    basic.pause(2000)
-    motorbit.turnright(50)
-    basic.pause(2000)
-    motorbit.brake()
-    basic.pause(2000)
-    motorbit.freestyle(-40, 30)
-    basic.pause(2000)
+    if (robit.left_line_follow() == 1 && robit.right_line_follow() == 0) {
+        robit.MotorRunDual(
+        robit.Motors.M1,
+        25,
+        robit.Motors.M2,
+        0
+        )
+    } else if (robit.left_line_follow() == 0 && robit.right_line_follow() == 1) {
+        robit.MotorRunDual(
+        robit.Motors.M1,
+        0,
+        robit.Motors.M2,
+        25
+        )
+    } else {
+        robit.MotorRunDual(
+        robit.Motors.M1,
+        10,
+        robit.Motors.M2,
+        10
+        )
+    }
 })
+
 ```
 
 ## License
