@@ -51,13 +51,13 @@ namespace robit {
     }
 
     export enum Motors {
-        //% block="Left front"
+        //% block="M1"
         M1 = 0x1,
-        //% block="Left rear"
+        //% block="M2"
         M2 = 0x2,
-        //% block="Right rear"
+        //% block="M3"
         M3 = 0x3,
-        //% block="Right front"
+        //% block="M4"
         M4 = 0x4
     }
 
@@ -67,13 +67,13 @@ namespace robit {
     }
 
     export enum Jpin {
-        //% block="J33"
+        //% block="J3"
         J3 = 3,
-        //% block="J11"
+        //% block="J1"
         J1 = 1,
-        //% block="J22"
+        //% block="J2"
         J2 = 2,
-        //% block="J44"
+        //% block="J4"
         J4 = 4
     }
 
@@ -377,6 +377,9 @@ namespace robit {
     //% speed2.min=-100 speed2.max=100
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
     export function MotorRunDual(motor1: Motors, speed1: number, motor2: Motors, speed2: number): void {
+   
+        speed1 = - speed1
+    
         MotorRun(motor1, speed1 / 2 * 5);   //100 map to 255
         MotorRun(motor2, speed2 / 2 * 5);
     }
@@ -474,10 +477,10 @@ namespace robit {
     //% weight=10
     export function left_line_follow(): number {
         let i = 0
-	if (pins.digitalReadPin(line_follow_Left_Pin) == 1) {
-             i = 1
+        if (pins.digitalReadPin(line_follow_Left_Pin) == 1) {
+            i = 1
         } else i = 0
-	return i
+        return i
     }
 
 
@@ -488,10 +491,10 @@ namespace robit {
     //% weight=10
     export function right_line_follow(): number {
         let i = 0
-	if (pins.digitalReadPin(line_follow_Right_Pin) == 1) {
-             i = 1
+        if (pins.digitalReadPin(line_follow_Right_Pin) == 1) {
+            i = 1
         } else i = 0
-	return i
+        return i
     }
 
 
