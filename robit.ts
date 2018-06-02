@@ -473,7 +473,7 @@ namespace robit {
     /**
 	 * line follow left
 	*/
-    //% blockId=robit_left_line_follow block="left line follow"
+    //% blockId=robit_left_line_follow block="left line follow digitalpin"
     //% weight=10
     export function left_line_follow(): number {
         let i = 0
@@ -487,7 +487,7 @@ namespace robit {
     /**
 	 * right follow right
 	*/
-    //% blockId=robit_right_line_follow block="right line follow"
+    //% blockId=robit_right_line_follow block="right line follow digitalpin"
     //% weight=10
     export function right_line_follow(): number {
         let i = 0
