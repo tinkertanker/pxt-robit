@@ -1,5 +1,3 @@
-
-
 //% color=#0fbc11 weight=10 icon="\uf013"
 namespace robit {
 
@@ -67,13 +65,13 @@ namespace robit {
     }
 
     export enum Jpin {
-        //% block="J3"
+        //% block="J3 (P1,P2)"
         J3 = 3,
-        //% block="J1"
+        //% block="J1 (P13,P14)"
         J1 = 1,
-        //% block="J2"
+        //% block="J2 (P15,P16)"
         J2 = 2,
-        //% block="J4"
+        //% block="J4 (P3,P4)"
         J4 = 4
     }
 
@@ -99,7 +97,7 @@ namespace robit {
 
     let matBuf = pins.createBuffer(17);
 
-    //iic写
+    
     function i2cwrite(addr: number, reg: number, value: number) {
         let buf = pins.createBuffer(2)
         buf[0] = reg
@@ -108,7 +106,7 @@ namespace robit {
     }
 
 
-    //iic设置
+    
     function i2ccmd(addr: number, value: number) {
         let buf = pins.createBuffer(1)
         buf[0] = value
@@ -116,7 +114,7 @@ namespace robit {
     }
 
 
-    //iic读
+    
     function i2cread(addr: number, reg: number) {
         pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE)
         let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE)
@@ -124,7 +122,7 @@ namespace robit {
     }
 
 
-    //初始化9685，使用内部时钟25MHz
+    
     function initPCA9685(): void {
         i2cwrite(PCA9685_ADDRESS, MODE1, 0x00)
         setFreq(50); //1s / 20ms
@@ -135,7 +133,7 @@ namespace robit {
     }
 
 
-    //设置PWM频率
+    
     function setFreq(freq: number): void {
         // Constrain the frequency
         let prescaleval = 25000000
@@ -155,7 +153,7 @@ namespace robit {
     }
 
 
-    //设置PWM
+    
     function setPwm(channel: number, on: number, off: number): void {
         if (channel < 0 || channel > 15)
             return;
@@ -171,7 +169,7 @@ namespace robit {
 
 
 
-    //设置步进电机
+    
     function setStepper(index: number, dir: boolean): void {
         if (index == 1) {
             if (dir) {
@@ -202,7 +200,7 @@ namespace robit {
     }
 
 
-    //电机停止
+    
     function stopMotor(index: number) {
         setPwm((index - 1) * 2, 0, 0)
         setPwm((index - 1) * 2 + 1, 0, 0)
@@ -212,7 +210,6 @@ namespace robit {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    //设置舵机PWM占空比（度数）
     /**
 	 * Servo Execute
 	 * @param index Servo Channel; eg: S1
@@ -261,81 +258,11 @@ namespace robit {
     }
 
 
-    //两路步进电机
-    //% blockId=robit_stepper_dual block="Dual Stepper(Degree) |M1 %degree1| M2 %degree2"
-    //% weight=89
-    //% advanced=true
-    export function StepperDual(degree1: number, degree2: number): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        setStepper(1, degree1 > 0);
-        setStepper(2, degree2 > 0);
-        degree1 = Math.abs(degree1);
-        degree2 = Math.abs(degree2);
-        basic.pause(10240 * Math.min(degree1, degree2) / 360);
-        if (degree1 > degree2) {
-            stopMotor(3); stopMotor(4);
-            basic.pause(10240 * (degree1 - degree2) / 360);
-        } else {
-            stopMotor(1); stopMotor(2);
-            basic.pause(10240 * (degree2 - degree1) / 360);
-        }
-
-        MotorStopAll()
-    }
-
-
-    //双步进前进距离
-    /**
-	 * Stepper Car move forward
-	 * @param distance Distance to move in cm; eg: 10, 20
-	 * @param diameter diameter of wheel in mm; eg: 48
-	*/
-    //% blockId=robit_stpcar_move block="Car Forward|Diameter(cm) %distance|Wheel Diameter(mm) %diameter"
-    //% weight=88
-    //% advanced=true
-    export function StpCarMove(distance: number, diameter: number): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        let delay = 10240 * 10 * distance / 3 / diameter; // use 3 instead of pi
-        setStepper(1, delay > 0);
-        setStepper(2, delay > 0);
-        delay = Math.abs(delay);
-        basic.pause(delay);
-        MotorStopAll()
-    }
-
-
-    //双步进转向角度
-    /**
-	 * Stepper Car turn by degree
-	 * @param turn Degree to turn; eg: 90, 180, 360
-	 * @param diameter diameter of wheel in mm; eg: 48
-	 * @param track track width of car; eg: 125
-	*/
-    //% blockId=robit_stpcar_turn block="Car Turn|Degree %turn|Wheel Diameter(mm) %diameter|Track(mm) %track"
-    //% weight=87
-    //% blockGap=50
-    //% advanced=true
-    export function StpCarTurn(turn: number, diameter: number, track: number): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        let delay = 10240 * turn * track / 360 / diameter;
-        setStepper(1, delay < 0);
-        setStepper(2, delay > 0);
-        delay = Math.abs(delay);
-        basic.pause(delay);
-        MotorStopAll()
-    }
-
-
     //单个电机速度
     //% blockId=robit_motor_run block="%index |Wheel|speed %speed "
     //% weight=85
     //% speed.min=-100 speed.max=100
+    //% advanced=true
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
     export function MotorRun(index: Motors, speed: number): void {
         if (!initialized) {
@@ -362,30 +289,27 @@ namespace robit {
     }
 
 
-
-    //两路电机速度
     /**
 	 * Execute two motors at the same time
-	 * @param motor1 First Motor; eg: M2
+     * @param motor_left describe parameter here, eg: 1
 	 * @param speed1 [-100-100] speed of motor; eg: 50
-	 * @param motor2 Second Motor; eg: M3
+	 * @param motor_right describe parameter here, eg: 2
 	 * @param speed2 [-100-100] speed of motor; eg: 50
 	*/
-    //% blockId=robit_motor_dual block="%motor1 |Wheel speed %speed1|%motor2|Wheel speed %speed2"
+    //% blockId=robit_motor_dual block="Left wheel %motor1|speed %speed1|Right wheel %motor2|speed %speed2"
     //% weight=84
     //% speed1.min=-100 speed1.max=100
     //% speed2.min=-100 speed2.max=100
-    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=4
-    export function MotorRunDual(motor1: Motors, speed1: number, motor2: Motors, speed2: number): void {
-   
-        speed1 = - speed1
-    
-        MotorRun(motor1, speed1 / 2 * 5);   //100 map to 255
-        MotorRun(motor2, speed2 / 2 * 5);
+  
+    export function MotorRunDual(motor_left: Motors, speed1: number, motor_right: Motors, speed2: number): void {
+        speed1 = -speed1
+
+        MotorRun(motor_left, speed1 / 2 * 5);   //100 map to 255
+        MotorRun(motor_right, speed2 / 2 * 5);
     }
 
 
-    //电机停止
+    
     //% blockId=robit_stop block="Motor Stop|%index|"
     //% weight=80
     export function MotorStop(index: Motors): void {
@@ -393,7 +317,7 @@ namespace robit {
     }
 
 
-    //所有电机停止
+    
     //% blockId=robit_stop_all block="Motor Stop All"
     //% weight=79
     //% blockGap=50
@@ -405,10 +329,10 @@ namespace robit {
 
 
 
-    //超声波
+    
     /**
 	 * get Ultrasonic
-	 * @param jpin describe parameter here, eg: J3
+	 * @param jpin, eg: 3
 	*/
     //% blockId=robit_ultrasonic block="Ultrasonic|pin %pin"
     //% weight=10
@@ -441,10 +365,10 @@ namespace robit {
 
 
 
-    //巡线初始化
+    
     /**
 	 * init line follow
-	 * @param jpin describe parameter here, eg: J2
+	 * @param jpin; eg: 1
 	*/
     //% blockId=robit_init_line_follow block="init line follow|pin %jpin"
     //% weight=10
