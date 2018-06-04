@@ -4,31 +4,53 @@ This ElecFreaks robit package was developed by [ElecFreaks](https://www.elecfrea
 
 ## Code Example
 ```JavaScript
+let item = 0
 robit.init_line_follow(robit.Jpin.J1)
+item = 0
 basic.forever(() => {
     if (robit.left_line_follow() == 1 && robit.right_line_follow() == 0) {
+        item = 1
         robit.MotorRunDual(
         robit.Motors.M1,
-        25,
+        20,
         robit.Motors.M2,
         0
         )
     } else if (robit.left_line_follow() == 0 && robit.right_line_follow() == 1) {
+        item = 2
         robit.MotorRunDual(
         robit.Motors.M1,
         0,
         robit.Motors.M2,
-        25
+        20
         )
-    } else {
+    } else if (robit.left_line_follow() == 0 && robit.right_line_follow() == 0) {
+        item = 0
         robit.MotorRunDual(
         robit.Motors.M1,
-        10,
+        20,
         robit.Motors.M2,
-        10
+        20
         )
+    } else {
+        if (item == 1) {
+            robit.MotorRunDual(
+            robit.Motors.M1,
+            20,
+            robit.Motors.M2,
+            0
+            )
+        } else if (item == 2) {
+            robit.MotorRunDual(
+            robit.Motors.M1,
+            0,
+            robit.Motors.M2,
+            20
+            )
+        }
     }
 })
+
 
 ```
 
