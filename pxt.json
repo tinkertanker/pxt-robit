@@ -1,11 +1,14 @@
 {
     "name": "robit",
-    "version": "0.0.10",
+    "version": "1.0.1",
     "description": "ELECFREAKS robit",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-	"IR": "github:Tinkertanker/pxt-ir-receiver"
+	"IR": "github:elecfreaks/pxt-IR",
+	"7-Segment display": "github:elecfreaks/pxt-display-tm1637",
+	"NeoPixel": "github:microsoft/pxt-neopixel",
+	"Sonarbit": "github:elecfreaks/pxt-sonarbit"
     },
     "files": [
         "README.md",
@@ -15,5 +18,5 @@
         "tests.ts"
     ],
     "public": true,
-    "installedVersion": "github:elecfreaks/pxt-robit#v0.0.10"
+    "installedVersion": "github:elecfreaks/pxt-robit#v1.0.1"
 }
