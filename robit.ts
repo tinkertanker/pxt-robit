@@ -38,14 +38,14 @@ namespace robit {
     const STP_CHD_H = 1023
 
     export enum Servos {
-        S1 = 0x01,
-        S2 = 0x02,
-        S3 = 0x03,
-        S4 = 0x04,
-        S5 = 0x05,
-        S6 = 0x06,
-        S7 = 0x07,
-        S8 = 0x08
+        S0 = 0x01,
+        S1 = 0x02,
+        S2 = 0x03,
+        S3 = 0x04,
+        S4 = 0x05,
+        S5 = 0x06,
+        S6 = 0x07,
+        S7 = 0x08
     }
 
     export enum Motors {
