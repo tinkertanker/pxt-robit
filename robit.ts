@@ -38,14 +38,14 @@ namespace robit {
     const STP_CHD_H = 1023
 
     export enum Servos {
-        S1 = 0x01,
-        S2 = 0x02,
-        S3 = 0x03,
-        S4 = 0x04,
-        S5 = 0x05,
-        S6 = 0x06,
-        S7 = 0x07,
-        S8 = 0x08
+        S0 = 0x01,
+        S1 = 0x02,
+        S2 = 0x03,
+        S3 = 0x04,
+        S4 = 0x05,
+        S5 = 0x06,
+        S6 = 0x07,
+        S7 = 0x08
     }
 
     export enum Motors {
@@ -74,6 +74,12 @@ namespace robit {
         //% block="J4 (P3,P4)"
         J4 = 4
     }
+    export enum Jpin_motor {
+        //% block="J1 (P13,P14)"
+        J1 = 1,
+        //% block="J2 (P15,P16)"
+        J2 = 2
+    }
 
     export enum Turns {
         //% blockId="T1B4" block="1/4"
@@ -91,13 +97,19 @@ namespace robit {
         //% blockId="T5B0" block="5"
         T5B0 = 1800
     }
+    export enum ledsta {
+        //% block="on"
+        led_on = 1,
+        //% block="off"
+        led_off = 0
+    }
 
     let initialized = false
     //    let initializedMatrix = false
 
     let matBuf = pins.createBuffer(17);
 
-    
+
     function i2cwrite(addr: number, reg: number, value: number) {
         let buf = pins.createBuffer(2)
         buf[0] = reg
@@ -106,7 +118,7 @@ namespace robit {
     }
 
 
-    
+
     function i2ccmd(addr: number, value: number) {
         let buf = pins.createBuffer(1)
         buf[0] = value
@@ -114,7 +126,7 @@ namespace robit {
     }
 
 
-    
+
     function i2cread(addr: number, reg: number) {
         pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE)
         let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE)
@@ -122,7 +134,7 @@ namespace robit {
     }
 
 
-    
+
     function initPCA9685(): void {
         i2cwrite(PCA9685_ADDRESS, MODE1, 0x00)
         setFreq(50); //1s / 20ms
@@ -133,7 +145,7 @@ namespace robit {
     }
 
 
-    
+
     function setFreq(freq: number): void {
         // Constrain the frequency
         let prescaleval = 25000000
@@ -153,7 +165,7 @@ namespace robit {
     }
 
 
-    
+
     function setPwm(channel: number, on: number, off: number): void {
         if (channel < 0 || channel > 15)
             return;
@@ -169,7 +181,7 @@ namespace robit {
 
 
 
-    
+
     function setStepper(index: number, dir: boolean): void {
         if (index == 1) {
             if (dir) {
@@ -200,7 +212,7 @@ namespace robit {
     }
 
 
-    
+
     function stopMotor(index: number) {
         setPwm((index - 1) * 2, 0, 0)
         setPwm((index - 1) * 2 + 1, 0, 0)
@@ -300,7 +312,7 @@ namespace robit {
     //% weight=84
     //% speed1.min=-100 speed1.max=100
     //% speed2.min=-100 speed2.max=100
-  
+
     export function MotorRunDual(motor_left: Motors, speed1: number, motor_right: Motors, speed2: number): void {
         speed1 = -speed1
 
@@ -309,7 +321,7 @@ namespace robit {
     }
 
 
-    
+
     //% blockId=robit_stop block="Motor Stop|%index|"
     //% weight=80
     export function MotorStop(index: Motors): void {
@@ -317,7 +329,7 @@ namespace robit {
     }
 
 
-    
+
     //% blockId=robit_stop_all block="Motor Stop All"
     //% weight=79
     //% blockGap=50
@@ -329,7 +341,7 @@ namespace robit {
 
 
 
-    
+
     /**
 	 * get Ultrasonic
 	 * @param jpin, eg: 3
@@ -361,11 +373,95 @@ namespace robit {
         let d = pins.pulseIn(pin, PulseValue.High, 23000);  // 8 / 340 = 
         return d * 5 / 3 / 58;
     }
+	
+	//makeblock_touch_sensor
+    //% blockId=Touch_sensor_is_touched block="Touch sensor is touched on|pin %pin"
+    //% advanced=true
+    //% weight=10
+    export function Touch_sensor_is_touched(jpin: Jpin): boolean {
+        let pin = DigitalPin.P2
+        switch (jpin) {
+            case 1: pin = DigitalPin.P14
+                break;
+            case 2: pin = DigitalPin.P16
+                break;
+            case 3: pin = DigitalPin.P2
+                break;
+            case 4: pin = DigitalPin.P4
+                break;
+        }
+        pins.setPull(pin, PinPullMode.PullUp)
+        if (pins.digitalReadPin(pin) == 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+	
+    //makeblock_led
+    //% blockId=makeblock_led block="connect LED to|pin %pin|turn %Ledsta"
+    //% weight=10
+    //% advanced=true
+    export function set_makeblock_led(jpin: Jpin, sta: ledsta): void {
+        let pin = DigitalPin.P2
+        switch (jpin) {
+            case 1: pin = DigitalPin.P14
+                break;
+            case 2: pin = DigitalPin.P16
+                break;
+            case 3: pin = DigitalPin.P2
+                break;
+            case 4: pin = DigitalPin.P4
+                break;
+        }
+        if (sta == 1) {
+            pins.digitalWritePin(pin, 1)
+        }
+        else if (sta == 0) {
+            pins.digitalWritePin(pin, 0)
+        }
+    }
+
+    //makeblock_motor
+    //% blockId=makeblock_motor block="connect 130-motor to|pin %pin|speed %speed "
+    //% weight=10
+    //% speed.min=-100 speed.max=100
+    //% advanced=true
+    export function set_makeblock_motor(jpin: Jpin_motor, speed: number): void {
+        let pin1 
+        let pin2 
+        switch (jpin) {
+            case 1: pin1 = AnalogPin.P13
+                pin2 = AnalogPin.P14
+                break;
+            case 2: pin1 = AnalogPin.P15
+                pin2 = AnalogPin.P16
+                break;
+        }
+        speed = speed * 10; // map 100 to 1000
+        if (speed < 1000) {
+            speed = -1000
+        }
+        if (speed > 1000) {
+            speed = 1000
+        }
+        if (speed >= 0) {
+           pins.analogWritePin(pin1, 0)
+           pins.analogSetPeriod(pin2, 1000)
+           pins.analogWritePin(pin2, speed)
+        }
+        if (speed < 0) {
+            speed = speed * -1
+            pins.analogWritePin(pin2, 0)
+            pins.analogSetPeriod(pin1, 1000)
+            pins.analogWritePin(pin1, speed)
+        }
+
+    }
 
 
 
-
-    
     /**
 	 * init line follow
 	 * @param jpin; eg: 1
