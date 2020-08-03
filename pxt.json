@@ -5,7 +5,7 @@
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "7-Segment display": "github:elecfreaks/pxt-display-tm1637",
+        "7-Segment display": "github:elecfreaks/pxt-display-tm1637#v0.0.1",
         "NeoPixel": "github:microsoft/pxt-neopixel",
         "IR": "github:Tinkertanker/pxt-ir-receiver"
     },
