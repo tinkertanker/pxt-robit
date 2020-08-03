@@ -7,8 +7,7 @@
         "core": "*",
         "7-Segment display": "github:elecfreaks/pxt-display-tm1637",
         "NeoPixel": "github:microsoft/pxt-neopixel",
-        "IR": "github:Tinkertanker/pxt-ir-receiver",
-        "Sonarbit": "github:elecfreaks/pxt-sonarbit"
+        "IR": "github:Tinkertanker/pxt-ir-receiver"
     },
     "files": [
         "README.md",
