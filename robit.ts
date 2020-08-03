@@ -1,4 +1,4 @@
-//% color=#0fbc11 weight=10 icon="\uf013"
+//% color=#0fbc11 icon="\uf013"
 namespace robit {
 
     let line_follow_Left_Pin = DigitalPin.P3
