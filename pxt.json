@@ -1,6 +1,6 @@
 {
     "name": "robit",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "description": "ELECFREAKS robit",
     "license": "MIT",
     "dependencies": {
