@@ -5,10 +5,10 @@
     "license": "MIT",
     "dependencies": {
         "core": "*",
-	"IR": "github:Tinkertanker/pxt-ir-receiver",
-	"7-Segment display": "github:elecfreaks/pxt-display-tm1637",
-	"NeoPixel": "github:microsoft/pxt-neopixel",
-	"Sonarbit": "github:elecfreaks/pxt-sonarbit"
+        "IR": "github:Tinkertanker/pxt-ir-receiver",
+        "7-Segment display": "github:elecfreaks/pxt-display-tm1637",
+        "NeoPixel": "github:microsoft/pxt-neopixel",
+        "Sonarbit": "github:elecfreaks/pxt-sonarbit"
     },
     "files": [
         "README.md",
@@ -18,5 +18,8 @@
         "tests.ts"
     ],
     "public": true,
-    "installedVersion": "github:elecfreaks/pxt-robit#v1.0.1"
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "tsprj"
 }
