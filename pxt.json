@@ -4,7 +4,6 @@
     "description": "ELECFREAKS robit",
     "dependencies": {
         "core": "*",
-        "radio": "*",
         "ir": "github:Tinkertanker/pxt-ir-receiver",
         "sonarbit": "github:elecfreaks/pxt-sonarbit"
     },
