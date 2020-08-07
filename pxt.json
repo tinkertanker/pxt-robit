@@ -6,7 +6,6 @@
         "core": "*",
         "radio": "*",
         "ir": "github:Tinkertanker/pxt-ir-receiver",
-        "pxt-display-tm1637": "github:elecfreaks/pxt-tm1637",
         "sonarbit": "github:elecfreaks/pxt-sonarbit"
     },
     "files": [
