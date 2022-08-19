@@ -1,10 +1,9 @@
 {
     "name": "pxt-robit",
-    "version": "2.0.10",
+    "version": "2.0.11",
     "description": "ELECFREAKS robit",
     "dependencies": {
         "core": "*",
-        "ir": "github:Tinkertanker/pxt-ir-receiver",
         "sonarbit": "github:elecfreaks/pxt-sonarbit"
     },
     "files": [
